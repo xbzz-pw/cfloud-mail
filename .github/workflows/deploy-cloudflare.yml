@@ -130,6 +130,12 @@ jobs:
           
           echo "✅ Environment setup completed."
 
+      - name: 🔍 诊断 token / Debug token
+        run: |
+          echo "token length: $(printf '%s' "$CLOUDFLARE_API_TOKEN" | wc -c)"
+          curl -s "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/tokens/verify" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" | jq '.success, .messages'
+
       - name: ⚡ 设置KV数据库 / Set up KV database
         working-directory: ./mail-worker
         run: |
